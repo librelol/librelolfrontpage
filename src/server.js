@@ -50,6 +50,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+app.get('/services', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'services.html'))
+});
+
 // Function to recursively get all Markdown files
 const getMarkdownFiles = (dir) => {
     const result = [];
@@ -81,14 +85,14 @@ const getMarkdownFiles = (dir) => {
 };
 
 // Route to list all Markdown files
-app.get('/blog', (req, res) => {
-    const markdownDir = path.join(__dirname, 'blog');
+app.get('/docs', (req, res) => {
+    const markdownDir = path.join(__dirname, 'docs');
     const markdownFiles = getMarkdownFiles(markdownDir);
     res.render('list', { files: markdownFiles, nonce: res.locals.nonce });
 });
 
 // Route to display Markdown content, supporting subdirectories
-app.get('/blog/*', (req, res) => {
+app.get('/docs/*', (req, res) => {
     const pagePath = req.params[0];
 
     // Sanitize the file path to prevent directory traversal
@@ -96,7 +100,7 @@ app.get('/blog/*', (req, res) => {
         return res.status(400).send('Invalid file path');
     }
 
-    const filePath = path.join(__dirname, 'blog', `${pagePath}.md`);
+    const filePath = path.join(__dirname, 'docs', `${pagePath}.md`);
 
     // Ensure the file is a Markdown file
     if (!filePath.endsWith('.md')) {
